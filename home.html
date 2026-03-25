@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Benefactor</title>
+  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #1a0a06;
+      color: #d4b896;
+      font-family: 'Share Tech Mono', monospace;
+      min-height: 100vh;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes glowPulse {
+      0%, 100% { opacity: 0.55; transform: scale(1); }
+      50%       { opacity: 0.75; transform: scale(1.08); }
+    }
+    @keyframes particleDrift {
+      0%   { transform: translateY(0) translateX(0); opacity: 0; }
+      10%  { opacity: 0.6; }
+      90%  { opacity: 0.4; }
+      100% { transform: translateY(-260px) translateX(var(--dx)); opacity: 0; }
+    }
+    @keyframes borderGlow {
+      0%, 100% { border-color: rgba(160,110,60,0.25); box-shadow: 0 0 0 rgba(200,150,60,0); }
+      50%       { border-color: rgba(200,150,60,0.5);  box-shadow: 0 0 24px rgba(200,140,50,0.15); }
+    }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      min-height: 460px;
+      padding: 48px 40px 60px;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 80% 60% at 70% 40%, rgba(80,30,10,0.55) 0%, transparent 70%),
+        linear-gradient(160deg, #2a0d06 0%, #1a0a06 60%);
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 500px; height: 380px;
+      top: -60px; right: -80px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(120,50,10,0.4) 0%, transparent 70%);
+      animation: glowPulse 6s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 55% 65% at 65% 50%, rgba(60,20,5,0.3) 0%, rgba(10,3,1,0.6) 100%);
+      pointer-events: none;
+    }
+    .particles { position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .particle {
+      position: absolute; bottom: 0; border-radius: 50%;
+      background: rgba(200,160,80,0.7);
+      animation: particleDrift var(--dur) ease-in var(--delay) infinite;
+    }
+    .hero-inner { position: relative; z-index: 1; max-width: 760px; }
+
+    .title {
+      font-family: 'IM Fell English', serif;
+      font-size: 2.8rem; color: #e8d5b0;
+      letter-spacing: 0.02em; line-height: 1.1; margin-bottom: 4px;
+      opacity: 0; animation: fadeUp 0.9s cubic-bezier(0.22,1,0.36,1) 0.1s forwards;
+      text-shadow: 0 0 40px rgba(200,150,60,0.3);
+    }
+    .subtitle {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.95rem; color: #c09a60;
+      letter-spacing: 0.18em; margin-bottom: 40px;
+      opacity: 0; animation: fadeUp 0.8s cubic-bezier(0.22,1,0.36,1) 0.35s forwards;
+      display: inline-block;
+    }
+    .quote-box {
+      background: rgba(30,12,5,0.72);
+      border: 1px solid rgba(160,110,60,0.25);
+      border-radius: 16px; padding: 32px 36px 28px; max-width: 660px;
+      line-height: 1.8; font-size: 0.88rem; color: #d4b896; letter-spacing: 0.06em;
+      opacity: 0;
+      animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.6s forwards,
+                 borderGlow 4s ease-in-out 1.6s infinite;
+    }
+    .quote-box p { text-align: center; margin-bottom: 20px; }
+    .quote-author { text-align: right; font-style: italic; font-size: 0.95rem; color: #c8a870; letter-spacing: 0.08em; }
+
+    /* ── Divider ── */
+    .divider { height: 1px; background: rgba(160,100,40,0.3); }
+
+    /* ── Sections ── */
+    .section { padding: 48px 40px 56px; background: #1c0c06; }
+    .section-alt { background: #1a0a06; }
+    .section-title { font-family: 'Share Tech Mono', monospace; font-size: 1.05rem; color: #c8a055; letter-spacing: 0.18em; margin-bottom: 32px; }
+
+    /* ── Report button ── */
+    .btn-report {
+      display: block; width: 100%; max-width: 520px;
+      padding: 18px 24px;
+      border: 1.5px solid rgba(160,110,60,0.4); border-radius: 10px;
+      background: rgba(25,10,4,0.6); color: #c8a060;
+      font-family: 'Share Tech Mono', monospace; font-size: 0.9rem;
+      letter-spacing: 0.14em; text-align: center; cursor: pointer;
+      transition: background 0.2s, border-color 0.2s; text-decoration: none;
+    }
+    .btn-report:hover { background: rgba(40,18,6,0.8); border-color: rgba(200,160,80,0.6); }
+
+    /* ── Facebook card ── */
+    .fb-card {
+      display: flex; max-width: 620px; border-radius: 12px; overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 13px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+    }
+    .fb-post {
+      background: #242526; color: #e4e6eb;
+      width: 280px; flex-shrink: 0; border-right: 1px solid #3a3b3c;
+      display: flex; flex-direction: column;
+    }
+    .fb-post-header { display: flex; align-items: center; gap: 8px; padding: 12px 12px 6px; }
+    .fb-avatar {
+      width: 36px; height: 36px; border-radius: 50%; background: #3a4a7a;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; color: #fff; font-weight: bold; flex-shrink: 0;
+    }
+    .fb-post-meta { flex: 1; }
+    .fb-post-name { font-weight: 700; font-size: 13px; color: #e4e6eb; }
+    .fb-post-date { font-size: 11px; color: #b0b3b8; }
+    .fb-three-dots { color: #b0b3b8; font-size: 18px; cursor: pointer; padding: 0 4px; }
+    .fb-text { padding: 4px 12px 8px; color: #e4e6eb; line-height: 1.4; font-size: 13px; }
+
+    /* Clickable photo */
+    .fb-photo-link {
+      display: block; width: 100%; height: 160px; overflow: hidden;
+      position: relative; cursor: pointer; text-decoration: none;
+    }
+    .fb-photo-link img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.35s ease; display: block; }
+    .fb-photo-link:hover img { transform: scale(1.05); }
+    .photo-overlay {
+      position: absolute; inset: 0; background: rgba(0,0,0,0);
+      transition: background 0.3s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .fb-photo-link:hover .photo-overlay { background: rgba(0,0,0,0.12); }
+
+    .fb-meta {
+      padding: 6px 12px; display: flex; justify-content: space-between;
+      color: #b0b3b8; font-size: 12px; border-bottom: 1px solid #3a3b3c;
+    }
+    .fb-actions { display: flex; justify-content: space-around; padding: 4px 8px; }
+    .fb-action-btn {
+      display: flex; align-items: center; gap: 5px;
+      color: #b0b3b8; font-size: 13px; font-weight: 600;
+      padding: 6px 10px; border-radius: 4px; cursor: pointer;
+    }
+    .fb-action-btn:hover { background: #3a3b3c; }
+
+    /* Blue "open on Facebook" bar */
+    .fb-open-link {
+      display: block; text-align: center; padding: 9px 12px;
+      background: #2d88ff; color: #fff; font-size: 12px; font-weight: 600;
+      text-decoration: none; letter-spacing: 0.03em; transition: background 0.2s;
+      margin-top: auto;
+    }
+    .fb-open-link:hover { background: #1a76ef; }
+
+    /* Comments */
+    .fb-comments {
+      background: #18191a; flex: 1; display: flex; flex-direction: column;
+      padding: 10px 10px 6px; gap: 6px; min-width: 0;
+    }
+    .comment-row { display: flex; gap: 8px; align-items: flex-start; }
+    .comment-avatar {
+      width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: bold; color: #fff;
+    }
+    .comment-content { flex: 1; min-width: 0; }
+    .comment-bubble { background: #3a3b3c; border-radius: 12px; padding: 6px 10px; }
+    .comment-name { font-weight: 700; font-size: 12px; color: #e4e6eb; margin-bottom: 2px; }
+    .comment-text { font-size: 12px; color: #e4e6eb; }
+    .comment-actions {
+      display: flex; gap: 8px; align-items: center;
+      padding: 2px 0 0 4px; font-size: 11px; color: #b0b3b8; flex-wrap: wrap;
+    }
+    .comment-actions span { cursor: pointer; }
+    .comment-actions span:hover { text-decoration: underline; }
+    .reply-indicator { font-size: 11px; color: #2d88ff; cursor: pointer; padding: 1px 0 0 6px; }
+    .comment-input-row { display: flex; gap: 6px; align-items: center; margin-top: auto; padding-top: 4px; }
+    .comment-input {
+      flex: 1; background: #3a3b3c; border: none; border-radius: 16px;
+      padding: 7px 12px; color: #b0b3b8; font-size: 12px; font-family: inherit; outline: none; min-width: 0;
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 640px) {
+      .hero { padding: 32px 18px 44px; min-height: auto; }
+      .title { font-size: 1.9rem; }
+      .subtitle { font-size: 0.8rem; letter-spacing: 0.1em; margin-bottom: 24px; }
+      .quote-box { padding: 20px 16px 18px; font-size: 0.8rem; }
+      .quote-box p br { display: none; }
+
+      .section { padding: 28px 18px 36px; }
+      .section-title { font-size: 0.85rem; letter-spacing: 0.1em; margin-bottom: 18px; }
+      .btn-report { font-size: 0.75rem; padding: 13px 14px; letter-spacing: 0.06em; }
+
+      /* Stack FB card */
+      .fb-card { flex-direction: column; max-width: 100%; }
+      .fb-post { width: 100%; border-right: none; border-bottom: 1px solid #3a3b3c; }
+      .fb-photo-link { height: 190px; }
+      .fb-comments { min-height: 250px; }
+    }
+    @media (max-width: 380px) {
+      .title { font-size: 1.55rem; }
+      .fb-action-btn { font-size: 11px; padding: 5px 5px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="particles" id="particles"></div>
+    <div class="hero-inner">
+      <h1 class="title">The Benefactor</h1>
+      <p class="subtitle">Indices de Départ</p>
+      <div class="quote-box">
+        <p>Sur ce site, vous trouverez quelques indices que<br>
+        j'ai découverts pour commencer. Certains<br>
+        pourront vous aider, tandis que d'autres non.<br>
+        Veuillez les explorer attentivement.</p>
+        <p class="quote-author">— Sara</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Incident Report -->
+  <div class="section">
+    <p class="section-title">Le Rapport d'Incident:</p>
+    <a href="https://docs.google.com/document/d/1JlBGV9hIXF82AHCS57jQS0fpxC7vEQcB/edit?usp=sharing&ouid=108940499360237299358&rtpof=true&sd=true" target="_blank" rel="noopener" class="btn-report">
+      Cliquez ici pour le rapport complet
+    </a>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Facebook Post -->
+  <div class="section section-alt">
+    <p class="section-title">Publication Facebook :</p>
+
+    <div class="fb-card">
+      <!-- Left: post -->
+      <div class="fb-post">
+        <div class="fb-post-header">
+          <div class="fb-avatar" style="background:#2a4a8a;">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <circle cx="10" cy="10" r="9" fill="#3a5a9a"/>
+              <text x="10" y="14" text-anchor="middle" font-size="9" fill="#fff" font-family="sans-serif" font-weight="bold">FS</text>
+            </svg>
+          </div>
+          <div class="fb-post-meta">
+            <div class="fb-post-name">FacultyofSciences <span style="color:#b0b3b8;font-weight:400;font-size:11px;">Follow</span></div>
+            <div class="fb-post-date">25 March · 🌐</div>
+          </div>
+          <div class="fb-three-dots">···</div>
+        </div>
+
+        <div class="fb-text">
+          Avec notre précieux donateur, Rachid Kammoun, lors de sa première visite à la faculté aujourd'hui!
+        </div>
+
+        <!-- Photo — replace src with your real image URL -->
+        <a class="fb-photo-link"
+           href="https://www.facebook.com/FacultyofSciences/posts/example123456"
+           target="_blank" rel="noopener">
+          <img
+            src="fb_post.png"
+            alt="Rachid Kammoun à la faculté"
+          >
+          <div class="photo-overlay"></div>
+        </a>
+
+        <div class="fb-meta">
+          <span>👍 1,202</span>
+          <span>12 comments · 3 shares</span>
+        </div>
+
+        <div class="fb-actions">
+          <div class="fb-action-btn">👍 Like</div>
+          <div class="fb-action-btn">💬 Comment</div>
+          <div class="fb-action-btn">↗ Share</div>
+        </div>
+      </div>
+
+      <!-- Right: comments -->
+      <div class="fb-comments">
+        <div class="comment-row">
+          <div class="comment-avatar" style="background:#6a5acd;">NS</div>
+          <div class="comment-content">
+            <div class="comment-bubble">
+              <div class="comment-name">Noura Slimen</div>
+              <div class="comment-text">Il est brillant !</div>
+            </div>
+            <div class="comment-actions">
+              <span>❤️ 2</span><span>Like</span><span>Reply</span><span>2h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="comment-row">
+          <div class="comment-avatar" style="background:#2a6aaa;">SK</div>
+          <div class="comment-content">
+            <div class="comment-bubble">
+              <div class="comment-name">Selim Kacem</div>
+              <div class="comment-text">Vraiment ??? On célèbre maintenant des gens qui ont des tonnes d'argent ?</div>
+            </div>
+            <div class="comment-actions">
+              <span>❤️ 1</span><span>Like</span><span>Reply</span><span>45m</span>
+            </div>
+            <div class="reply-indicator">View 3 more replies</div>
+          </div>
+        </div>
+
+        <div class="comment-row">
+          <div class="comment-avatar" style="background:#cc3355;">RT</div>
+          <div class="comment-content">
+            <div class="comment-bubble">
+              <div class="comment-name">Rania Trabelsi</div>
+              <div class="comment-text">Bravo ❤️</div>
+            </div>
+            <div class="comment-actions">
+              <span>👍 1</span><span>Like</span><span>Reply</span><span>12m</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="comment-input-row">
+          <div class="comment-avatar" style="background:#555;width:24px;height:24px;font-size:9px;flex-shrink:0;">U</div>
+          <input class="comment-input" type="text" placeholder="Write a comment...">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const container = document.getElementById('particles');
+    for (let i = 0; i < 22; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = 1 + Math.random() * 2.5;
+      p.style.cssText = `
+        left:${Math.random()*100}%;
+        --dx:${(Math.random()-0.5)*80}px;
+        --dur:${5+Math.random()*8}s;
+        --delay:${Math.random()*10}s;
+        width:${size}px; height:${size}px; opacity:0;
+      `;
+      container.appendChild(p);
+    }
+  </script>
+</body>
+</html>
