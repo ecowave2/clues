@@ -48,7 +48,7 @@
       overflow: hidden;
       display: flex;
       align-items: center;
-      justify-content: center;           /* Added for perfect centering */
+      justify-content: center;
       background:
         radial-gradient(ellipse 85% 65% at 72% 38%, rgba(90,35,12,0.6) 0%, transparent 75%),
         linear-gradient(165deg, #2a0d06 0%, #1a0a06 65%);
@@ -94,7 +94,7 @@
       z-index: 2; 
       max-width: 780px; 
       width: 100%;
-      text-align: center;                    /* Ensures content is centered */
+      text-align: center;
     }
 
     .title {
@@ -119,15 +119,15 @@
       display: inline-block;
     }
 
-    /* Sara's Quote Card - Now perfectly centered */
+    /* Sara's Quote Card */
     .quote-box {
       background: rgba(28,13,6,0.68);
       backdrop-filter: blur(12px);
       border: 1px solid rgba(170,120,65,0.35);
       border-radius: 18px; 
       padding: 34px 38px 30px; 
-      max-width: 620px;                    /* Slightly narrower for better centering */
-      margin: 0 auto;                      /* Ensures horizontal centering */
+      max-width: 620px;
+      margin: 0 auto;
       line-height: 1.85; 
       font-size: 0.9rem; 
       color: #e0c9a0; 
@@ -176,6 +176,21 @@
       text-shadow: 0 0 12px rgba(200,140,60,0.2);
     }
 
+    .coded-alphabets {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .coded-alphabets img {
+      max-width: 100%;
+      height: auto;
+      border: 2px solid rgba(170,120,65,0.4);
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+      margin: 25px auto 0;
+      display: block;
+    }
+
     /* ── Report button ── */
     .btn-report {
       display: block; 
@@ -203,7 +218,7 @@
       box-shadow: 0 14px 35px rgba(200,140,50,0.25);
     }
 
-    /* Facebook Card (unchanged from previous enhancement) */
+    /* Facebook Card */
     .fb-card {
       display: flex; 
       max-width: 640px; 
@@ -461,10 +476,10 @@
       .fb-post { width: 100%; border-right: none; border-bottom: 1px solid #3a3b3c; }
       .fb-photo-link { height: 195px; }
       .fb-comments { min-height: 260px; }
-    }
-
-    @media (max-width: 380px) {
-      .title { font-size: 1.68rem; }
+      
+      .coded-alphabets img {
+        max-width: 100%;
+      }
     }
   </style>
 </head>
@@ -508,6 +523,7 @@
     <p class="section-title">Publication Facebook :</p>
 
     <div class="fb-card">
+      <!-- ... (le code de la carte Facebook reste inchangé) ... -->
       <div class="fb-post">
         <div class="fb-post-header">
           <div class="fb-avatar" style="background:#2a4a8a;">
@@ -534,7 +550,7 @@
 
         <div class="fb-meta">
           <span>👍 1,202</span>
-          <span>6 comments · 3 shares</span>
+          <span>12 comments · 3 shares</span>
         </div>
 
         <div class="fb-actions">
@@ -545,6 +561,7 @@
       </div>
 
       <div class="fb-comments">
+        <!-- commentaires existants... (inchangés) -->
         <div class="comment-row">
           <div class="comment-avatar" style="background:#6a5acd;">NS</div>
           <div class="comment-content">
@@ -590,6 +607,20 @@
           <input class="comment-input" type="text" placeholder="Write a comment...">
         </div>
       </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Nouvelle Section : Alphabets codés -->
+  <div class="section">
+    <p class="section-title">Alphabets codés</p>
+    
+    <div class="coded-alphabets">
+      <p style="max-width: 680px; margin: 0 auto 28px; font-size: 0.95rem; color: #d4b896; line-height: 1.7;">
+        Certains messages utilisent des alphabets modifiés.<br>
+      </p>
+      <img src="coded_alphabet.jpg" alt="Alphabet codé" title="Alphabet codé">
     </div>
   </div>
 
